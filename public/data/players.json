@@ -1,0 +1,27 @@
+[
+  {
+    "id": "player1",
+    "name": "Byber",
+    "avatar": "assets/players/player1.png"
+  },
+  {
+    "id": "player2",
+    "name": "ICLoud",
+    "avatar": "assets/players/player2.png"
+  },
+  {
+    "id": "player3",
+    "name": "Scottbio$",
+    "avatar": "assets/players/player3.png"
+  },
+  {
+    "id": "player4",
+    "name": "Chato",
+    "avatar": "assets/players/player4.png"
+  },
+  {
+    "id": "player5",
+    "name": "Zed le ninja",
+    "avatar": "assets/players/player5.png"
+  }
+]

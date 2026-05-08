@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valorant Roulette</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <div id="app">
+
+    <header class="site-header">
+      <div class="header-line"></div>
+      <h1>VALORANT <span class="accent">ROULETTE</span></h1>
+      <div class="header-line"></div>
+    </header>
+
+    <!-- ── Controls (always visible until draw starts) ─────────────────── -->
+    <section id="controls" class="section controls">
+      <label class="option-label">
+        <input type="checkbox" id="allow-duplicates">
+        <span>Autoriser les agents en double</span>
+      </label>
+      <div class="btn-group">
+        <button id="btn-start" class="btn btn-primary">
+          ▶&nbsp; LANCER LE TIRAGE
+        </button>
+        <button id="btn-reset" class="btn btn-secondary hidden">
+          ↺&nbsp; RECOMMENCER
+        </button>
+      </div>
+    </section>
+
+    <!-- ── Full-width shuffle animation ───────────────────────────────── -->
+    <section id="shuffle-section" class="section hidden">
+      <h2 class="section-title">ORDRE DES JOUEURS</h2>
+      <div id="shuffle-arena" class="shuffle-arena">
+        <div id="shuffle-cards" class="shuffle-cards"></div>
+      </div>
+    </section>
+
+    <!-- ── 2-column selection layout ──────────────────────────────────── -->
+    <div id="selection-layout" class="selection-layout hidden">
+
+      <aside id="players-sidebar" class="players-sidebar">
+        <h2 class="section-title">ORDRE DU TIRAGE</h2>
+        <div id="sidebar-players"></div>
+      </aside>
+
+      <main id="roulette-main" class="roulette-main">
+
+        <div id="current-player-banner" class="current-player-banner">
+          <span id="current-player-name" class="current-player-name"></span>
+        </div>
+
+        <div id="reel-wrapper" class="reel-wrapper">
+          <div class="reel-fade-left"></div>
+          <div class="reel-fade-right"></div>
+          <div id="reel-cursor" class="reel-cursor">
+            <div class="cursor-top"></div>
+            <div class="cursor-line"></div>
+            <div class="cursor-bottom"></div>
+          </div>
+          <div id="reel-container" class="reel-container">
+            <div id="reel-track" class="reel-track"></div>
+          </div>
+        </div>
+
+        <div id="opening-result" class="opening-result hidden">
+          <span id="opening-result-text"></span>
+        </div>
+
+        <!-- Button states are swapped by JS via .hidden -->
+        <div id="roulette-controls" class="roulette-controls">
+
+          <div id="ctrl-spin" class="ctrl-state">
+            <button id="btn-spin" class="btn btn-primary btn-xl">
+              ▶&nbsp; LANCER
+            </button>
+            <span class="spin-hint">ou appuyez sur <kbd>Espace</kbd></span>
+          </div>
+
+          <div id="ctrl-reveal" class="ctrl-state hidden">
+            <button id="btn-reroll" class="btn btn-secondary">
+              ↺&nbsp; RE-TIRER
+            </button>
+            <button id="btn-next" class="btn btn-primary">
+              SUIVANT &nbsp;→
+            </button>
+          </div>
+
+          <div id="ctrl-done" class="ctrl-state hidden">
+            <button id="btn-reroll-last" class="btn btn-secondary">
+              ↺&nbsp; RE-TIRER
+            </button>
+            <button id="btn-finish" class="btn btn-primary">
+              ✓&nbsp; TERMINER
+            </button>
+          </div>
+
+        </div>
+
+      </main>
+    </div>
+
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
