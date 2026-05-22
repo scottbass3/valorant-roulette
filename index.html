@@ -17,18 +17,31 @@
       <div class="header-line"></div>
     </header>
 
-    <!-- ── Controls (always visible until draw starts) ─────────────────── -->
+    <!-- ── Controls ────────────────────────────────────────────────────── -->
     <section id="controls" class="section controls">
       <label class="option-label">
         <input type="checkbox" id="allow-duplicates">
         <span>Autoriser les agents en double</span>
       </label>
       <div class="btn-group">
+        <button id="btn-config" class="btn btn-secondary">⚙&nbsp; CONFIG</button>
         <button id="btn-start" class="btn btn-primary">
           ▶&nbsp; LANCER LE TIRAGE
         </button>
         <button id="btn-reset" class="btn btn-secondary hidden">
           ↺&nbsp; RECOMMENCER
+        </button>
+      </div>
+    </section>
+
+    <!-- ── Onboarding (no players yet) ───────────────────────────────── -->
+    <section id="onboarding" class="section onboarding hidden">
+      <div class="onboarding-inner">
+        <div class="onboarding-icon">👥</div>
+        <h2 class="onboarding-title">Aucun joueur configuré</h2>
+        <p class="onboarding-desc">Ajoutez vos joueurs pour commencer le tirage.</p>
+        <button id="btn-onboarding-config" class="btn btn-primary">
+          ⚙&nbsp; CONFIGURER LES JOUEURS
         </button>
       </div>
     </section>
@@ -72,7 +85,6 @@
           <span id="opening-result-text"></span>
         </div>
 
-        <!-- Button states are swapped by JS via .hidden -->
         <div id="roulette-controls" class="roulette-controls">
 
           <div id="ctrl-spin" class="ctrl-state">

@@ -125,7 +125,6 @@ body {
 .shuffle-arena { min-height: 300px; position: relative; }
 .shuffle-cards { position: relative; min-height: 260px; }
 
-/* Flying cards during shuffle */
 .shuffle-card {
   position: absolute;
   width: 120px; height: 165px;
@@ -140,21 +139,16 @@ body {
   border-radius: 6px;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  gap: 8px; padding: 8px;
+  gap: 10px; padding: 12px;
 }
-.sc-avatar {
-  width: 64px; height: 64px;
+.sc-initials {
+  width: 60px; height: 60px;
   border-radius: 50%;
-  overflow: hidden;
   background: var(--bg);
-  display: flex; align-items: center; justify-content: center;
   border: 2px solid var(--red);
-}
-.sc-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.sc-avatar-fallback {
-  width: 100%; height: 100%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 24px; font-weight: 700; color: var(--red);
+  font-size: 26px; font-weight: 700; color: var(--red);
+  flex-shrink: 0;
 }
 .sc-name { font-size: 14px; font-weight: 700; text-align: center; letter-spacing: 0.04em; }
 
@@ -201,25 +195,9 @@ body {
   min-width: 24px; text-align: center;
   flex-shrink: 0;
 }
-.sp-info {
-  display: flex; align-items: center; gap: 10px;
-  flex: 1; min-width: 0;
-}
-.sp-avatar {
-  width: 38px; height: 38px;
-  border-radius: 50%; overflow: hidden;
-  background: var(--bg);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.sp-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.sp-avatar-fallback {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; font-weight: 700; color: var(--red);
-}
 .sp-name {
   font-size: 16px; font-weight: 600;
+  flex: 1; min-width: 0;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
@@ -326,7 +304,6 @@ body {
   will-change: transform;
 }
 
-/* Reel cards */
 .reel-card {
   width: 140px; min-width: 140px; height: 170px;
   margin: 0 10px;
@@ -381,9 +358,7 @@ body {
   gap: 14px;
   align-self: center;
 }
-
 .ctrl-state { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center; }
-
 .spin-hint { font-size: 15px; color: var(--text-dim); }
 .spin-hint kbd {
   display: inline-block;
@@ -409,6 +384,187 @@ body {
   animation: fadeUp 0.3s ease;
 }
 
+/* ─── Onboarding ─────────────────────────────────────────────────────────── */
+.onboarding { text-align: center; padding: 48px 24px; }
+.onboarding-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.onboarding-icon  { font-size: 48px; line-height: 1; }
+.onboarding-title {
+  font-size: 22px; font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--red);
+  text-transform: uppercase;
+}
+.onboarding-desc  { font-size: 16px; color: var(--text-dim); }
+
+/* ─── Config modal ───────────────────────────────────────────────────────── */
+.config-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.config-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.72);
+}
+.config-panel {
+  position: relative;
+  width: min(680px, 96vw);
+  max-height: 82vh;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.config-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.config-tabs { display: flex; gap: 0; }
+.config-tab {
+  padding: 16px 24px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -1px;
+}
+.config-tab:hover    { color: var(--text); }
+.config-tab.active   { color: var(--red); border-bottom-color: var(--red); }
+.config-close {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 8px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.config-close:hover { color: var(--red); }
+
+.config-body {
+  overflow-y: auto;
+  flex: 1;
+  padding: 24px 20px;
+}
+
+/* Players pane */
+.config-player-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+.config-player-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.config-rank {
+  font-size: 15px; font-weight: 700;
+  color: var(--red);
+  min-width: 22px; text-align: center;
+  flex-shrink: 0;
+}
+.config-add-row {
+  display: flex;
+  gap: 10px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+}
+.config-empty {
+  color: var(--text-dim);
+  font-size: 15px;
+  padding: 8px 0;
+}
+
+/* Agents pane */
+.config-note {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+.config-agent-list  { display: flex; flex-direction: column; gap: 20px; }
+.config-agent-group { display: flex; flex-direction: column; gap: 8px; }
+.config-agent-role  {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--red);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.config-agent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.config-agent-img {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg3);
+  flex-shrink: 0;
+}
+.config-canonical {
+  font-size: 15px; font-weight: 600;
+  min-width: 90px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+/* Shared input */
+.config-input {
+  flex: 1;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 15px;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.config-input:focus  { border-color: var(--red); }
+.config-input::placeholder { color: var(--text-dim); }
+
+/* Icon buttons */
+.config-del,
+.config-reset {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text-dim);
+  font-size: 14px;
+  padding: 6px 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s;
+  font-family: var(--font);
+}
+.config-del:hover   { color: var(--red); border-color: var(--red); }
+.config-reset:hover:not(:disabled) { color: var(--red); border-color: var(--red); }
+.config-reset:disabled { opacity: 0.3; cursor: not-allowed; }
+
 /* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 800px) {
   :root { --sidebar-w: 100%; }
@@ -416,4 +572,5 @@ body {
   .players-sidebar { position: static; }
   .btn-xl { font-size: 17px; padding: 13px 32px; }
   .current-player-name { font-size: 26px; }
+  .config-canonical { display: none; }
 }

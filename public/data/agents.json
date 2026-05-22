@@ -1,176 +1,31 @@
 [
-  {
-    "id": "jett",
-    "name": "Jett 27",
-    "role": "Duelist",
-    "image": "assets/agents/Jett.png"
-  },
-  {
-    "id": "phoenix",
-    "name": "Pnx",
-    "role": "Duelist",
-    "image": "assets/agents/Phoenix.png"
-  },
-  {
-    "id": "reyna",
-    "name": "Reine Fatima",
-    "role": "Duelist",
-    "image": "assets/agents/Reyna.png"
-  },
-  {
-    "id": "raze",
-    "name": "Razemoket",
-    "role": "Duelist",
-    "image": "assets/agents/Raze.png"
-  },
-  {
-    "id": "yoru",
-    "name": "Japon",
-    "role": "Duelist",
-    "image": "assets/agents/Yoru.png"
-  },
-  {
-    "id": "neon",
-    "name": "Sonic",
-    "role": "Duelist",
-    "image": "assets/agents/Neon.png"
-  },
-  {
-    "id": "iso",
-    "name": "1v1 kid",
-    "role": "Duelist",
-    "image": "assets/agents/Iso.png"
-  },
-  {
-    "id": "brimstone",
-    "name": "Tablaaate",
-    "role": "Controller",
-    "image": "assets/agents/Brimstone.png"
-  },
-  {
-    "id": "viper",
-    "name": "Viper",
-    "role": "Controller",
-    "image": "assets/agents/Viper.png"
-  },
-  {
-    "id": "omen",
-    "name": "Dark Sasuke",
-    "role": "Controller",
-    "image": "assets/agents/Omen.png"
-  },
-  {
-    "id": "astra",
-    "name": "Comment on ult",
-    "role": "Controller",
-    "image": "assets/agents/Astra.png"
-  },
-  {
-    "id": "harbor",
-    "name": "Tiplouf",
-    "role": "Controller",
-    "image": "assets/agents/Harbor.png"
-  },
-  {
-    "id": "clove",
-    "name": "Claude",
-    "role": "Controller",
-    "image": "assets/agents/Clove.png"
-  },
-  {
-    "id": "sova",
-    "name": "Sniper monkey",
-    "role": "Initiator",
-    "image": "assets/agents/Sova.png"
-  },
-  {
-    "id": "breach",
-    "name": "Beach",
-    "role": "Initiator",
-    "image": "assets/agents/Breach.png"
-  },
-  {
-    "id": "skye",
-    "name": "Greta Thunberg",
-    "role": "Initiator",
-    "image": "assets/agents/Skye.png"
-  },
-  {
-    "id": "kayo",
-    "name": "Robot.txt",
-    "role": "Initiator",
-    "image": "assets/agents/KAYO.png"
-  },
-  {
-    "id": "fade",
-    "name": "Sombre hentai",
-    "role": "Initiator",
-    "image": "assets/agents/Fade.png"
-  },
-  {
-    "id": "gekko",
-    "name": "Michou",
-    "role": "Initiator",
-    "image": "assets/agents/Gekko.png"
-  },
-  {
-    "id": "sage",
-    "name": "La chine",
-    "role": "Sentinel",
-    "image": "assets/agents/Sage.png"
-  },
-  {
-    "id": "cypher",
-    "name": "Cyber",
-    "role": "Sentinel",
-    "image": "assets/agents/Cypher.png"
-  },
-  {
-    "id": "killjoy",
-    "name": "Panzer IV",
-    "role": "Sentinel",
-    "image": "assets/agents/Killjoy.png"
-  },
-  {
-    "id": "chamber",
-    "name": "Ma france, mon saucisson",
-    "role": "Sentinel",
-    "image": "assets/agents/Chamber.png"
-  },
-  {
-    "id": "deadlock",
-    "name": "Un jeu de merde",
-    "role": "Sentinel",
-    "image": "assets/agents/Deadlock.png"
-  },
-  {
-    "id": "vyse",
-    "name": "Vyse",
-    "role": "Sentinel",
-    "image": "assets/agents/Vyse.png"
-  },
-  {
-    "id": "tejo",
-    "name": "Tejoriste",
-    "role": "Initiator",
-    "image": "assets/agents/Tejo.png"
-  },
-  {
-    "id": "miks",
-    "name": "Musique.mp3",
-    "role": "Controller",
-    "image": "assets/agents/Miks.png"
-  },
-  {
-    "id": "veto",
-    "name": "Contre UNO",
-    "role": "Sentinel",
-    "image": "assets/agents/Veto.png"
-  },
-  {
-    "id": "waylay",
-    "name": "Wayway",
-    "role": "Duelist",
-    "image": "assets/agents/Waylay.png"
-  }
+  { "id": "jett",      "name": "Jett",      "role": "Duelist",    "image": "assets/agents/Jett.png" },
+  { "id": "phoenix",   "name": "Phoenix",   "role": "Duelist",    "image": "assets/agents/Phoenix.png" },
+  { "id": "reyna",     "name": "Reyna",     "role": "Duelist",    "image": "assets/agents/Reyna.png" },
+  { "id": "raze",      "name": "Raze",      "role": "Duelist",    "image": "assets/agents/Raze.png" },
+  { "id": "yoru",      "name": "Yoru",      "role": "Duelist",    "image": "assets/agents/Yoru.png" },
+  { "id": "neon",      "name": "Neon",      "role": "Duelist",    "image": "assets/agents/Neon.png" },
+  { "id": "iso",       "name": "Iso",       "role": "Duelist",    "image": "assets/agents/Iso.png" },
+  { "id": "waylay",    "name": "Waylay",    "role": "Duelist",    "image": "assets/agents/Waylay.png" },
+  { "id": "brimstone", "name": "Brimstone", "role": "Controller", "image": "assets/agents/Brimstone.png" },
+  { "id": "viper",     "name": "Viper",     "role": "Controller", "image": "assets/agents/Viper.png" },
+  { "id": "omen",      "name": "Omen",      "role": "Controller", "image": "assets/agents/Omen.png" },
+  { "id": "astra",     "name": "Astra",     "role": "Controller", "image": "assets/agents/Astra.png" },
+  { "id": "harbor",    "name": "Harbor",    "role": "Controller", "image": "assets/agents/Harbor.png" },
+  { "id": "clove",     "name": "Clove",     "role": "Controller", "image": "assets/agents/Clove.png" },
+  { "id": "miks",      "name": "Miks",      "role": "Controller", "image": "assets/agents/Miks.png" },
+  { "id": "sova",      "name": "Sova",      "role": "Initiator",  "image": "assets/agents/Sova.png" },
+  { "id": "breach",    "name": "Breach",    "role": "Initiator",  "image": "assets/agents/Breach.png" },
+  { "id": "skye",      "name": "Skye",      "role": "Initiator",  "image": "assets/agents/Skye.png" },
+  { "id": "kayo",      "name": "KAY/O",     "role": "Initiator",  "image": "assets/agents/KAYO.png" },
+  { "id": "fade",      "name": "Fade",      "role": "Initiator",  "image": "assets/agents/Fade.png" },
+  { "id": "gekko",     "name": "Gekko",     "role": "Initiator",  "image": "assets/agents/Gekko.png" },
+  { "id": "tejo",      "name": "Tejo",      "role": "Initiator",  "image": "assets/agents/Tejo.png" },
+  { "id": "sage",      "name": "Sage",      "role": "Sentinel",   "image": "assets/agents/Sage.png" },
+  { "id": "cypher",    "name": "Cypher",    "role": "Sentinel",   "image": "assets/agents/Cypher.png" },
+  { "id": "killjoy",   "name": "Killjoy",   "role": "Sentinel",   "image": "assets/agents/Killjoy.png" },
+  { "id": "chamber",   "name": "Chamber",   "role": "Sentinel",   "image": "assets/agents/Chamber.png" },
+  { "id": "deadlock",  "name": "Deadlock",  "role": "Sentinel",   "image": "assets/agents/Deadlock.png" },
+  { "id": "vyse",      "name": "Vyse",      "role": "Sentinel",   "image": "assets/agents/Vyse.png" },
+  { "id": "veto",      "name": "Veto",      "role": "Sentinel",   "image": "assets/agents/Veto.png" }
 ]

@@ -4,13 +4,14 @@ import { resumeAudio, preloadSounds, playShuffleWhoosh } from './utils/sound.js'
 import { animatePlayerShuffle }  from './animations/playerShuffle.js';
 import { animateCaseOpening }    from './animations/caseOpening.js';
 import { getAgentColorByRole }   from './utils/agentColor.js';
+import { openConfigModal }       from './config.js';
 
-// ─── State ───────────────────────────────────────────────────────────────────
+// ─── State ────────────────────────────────────────────────────────────────────
 const state = {
   players: [],
   agents: [],
   orderedPlayers: [],
-  assignments: {},  // playerId → agent
+  assignments: {},   // playerId → agent
   usedAgents: new Set(),
   currentIdx: 0,
   spinning: false,
@@ -31,8 +32,11 @@ const rouletteControls = $('roulette-controls');
 const ctrlSpin         = $('ctrl-spin');
 const ctrlReveal       = $('ctrl-reveal');
 const ctrlDone         = $('ctrl-done');
+const onboarding       = $('onboarding');
 const btnStart         = $('btn-start');
 const btnReset         = $('btn-reset');
+const btnConfig        = $('btn-config');
+const btnOnboardConfig = $('btn-onboarding-config');
 const btnSpin          = $('btn-spin');
 const btnReroll        = $('btn-reroll');
 const btnRerollLast    = $('btn-reroll-last');
@@ -46,9 +50,27 @@ async function init() {
   state.players = data.players;
   state.agents  = data.agents;
   setupControls();
+  updateOnboarding();
+}
+
+function updateOnboarding() {
+  const hasPlayers = state.players.length > 0;
+  onboarding.classList.toggle('hidden', hasPlayers);
+  btnStart.disabled = !hasPlayers;
 }
 
 function setupControls() {
+  const openConfig = () => openConfigModal(state.agents, {
+      onPlayersChange:   players  => { state.players = players; updateOnboarding(); },
+      onAgentNameChange: (id, name) => {
+        const agent = state.agents.find(a => a.id === id);
+        if (agent) agent.name = name ?? agent.canonicalName;
+      },
+    });
+
+  btnConfig.addEventListener('click', openConfig);
+  btnOnboardConfig.addEventListener('click', openConfig);
+
   btnStart.addEventListener('click', async () => {
     await resumeAudio();
     startDraw();
@@ -71,7 +93,7 @@ function setupControls() {
     const revealVisible = !ctrlReveal.classList.contains('hidden');
     const doneVisible   = !ctrlDone.classList.contains('hidden');
 
-    if (spinVisible)   triggerSpin();
+    if (spinVisible)        triggerSpin();
     else if (revealVisible) advanceToNext();
     else if (doneVisible)   finish();
   });
@@ -80,6 +102,10 @@ function setupControls() {
 // ─── Draw flow ────────────────────────────────────────────────────────────────
 async function startDraw() {
   if (state.spinning) return;
+  if (!state.players.length) {
+    showToast('Configurez au moins un joueur !');
+    return;
+  }
 
   state.orderedPlayers = shuffle([...state.players]);
   state.assignments    = {};
@@ -87,54 +113,47 @@ async function startDraw() {
   state.currentIdx     = 0;
 
   hide(btnStart);
+  hide(btnConfig);
   show(btnReset);
 
-  // 1. Shuffle animation (full width)
   show(shuffleSection);
   shuffleSection.scrollIntoView({ behavior: 'smooth' });
   await sleep(200);
   await animatePlayerShuffle(state.orderedPlayers, shuffleCards);
   await sleep(300);
 
-  // 2. Transition to 2-column layout
   await transitionToSelection();
 }
 
 async function transitionToSelection() {
-  // Fade out shuffle section
   shuffleSection.style.transition = 'opacity 0.35s ease';
-  shuffleSection.style.opacity = '0';
+  shuffleSection.style.opacity    = '0';
   await sleep(360);
   hide(shuffleSection);
-  shuffleSection.style.opacity = '';
+  shuffleSection.style.opacity    = '';
   shuffleSection.style.transition = '';
 
-  // Build sidebar (all cards invisible to start)
   buildSidebar(state.orderedPlayers);
 
-  // Reveal layout (instant, no flash)
   selectionLayout.classList.remove('hidden');
   selectionLayout.style.opacity = '0';
   await sleep(30);
   selectionLayout.style.transition = 'opacity 0.3s ease';
-  selectionLayout.style.opacity = '1';
+  selectionLayout.style.opacity    = '1';
   selectionLayout.scrollIntoView({ behavior: 'smooth' });
   await sleep(320);
   selectionLayout.style.transition = '';
 
-  // Animate sidebar cards in one by one
   const cards = sidebarPlayers.querySelectorAll('.sidebar-player');
   for (const card of cards) {
     card.style.transition = 'opacity 0.22s ease, transform 0.22s ease';
-    card.style.opacity = '1';
-    card.style.transform = 'translateX(0)';
+    card.style.opacity    = '1';
+    card.style.transform  = 'translateX(0)';
     playShuffleWhoosh();
     await sleep(90);
   }
 
   await sleep(200);
-
-  // Prepare first player
   loadPlayer(state.orderedPlayers[0]);
   showCtrl('spin');
 }
@@ -144,7 +163,6 @@ function loadPlayer(player) {
   hide(openingResult);
   reelTrack.innerHTML = '';
 
-  // Highlight active sidebar card
   sidebarPlayers.querySelectorAll('.sidebar-player').forEach(c => c.classList.remove('active'));
   const activeCard = sidebarPlayers.querySelector(`[data-player-id="${player.id}"]`);
   if (activeCard) {
@@ -156,35 +174,32 @@ function loadPlayer(player) {
 // ─── Spin ─────────────────────────────────────────────────────────────────────
 async function triggerSpin() {
   if (state.spinning) return;
-  state.spinning = true;
-  btnSpin.disabled = true;
+  state.spinning    = true;
+  btnSpin.disabled  = true;
 
   const player    = state.orderedPlayers[state.currentIdx];
   const available = getAvailableAgents();
 
   if (!available.length) {
     showToast('Plus d\'agents disponibles !');
-    state.spinning  = false;
+    state.spinning   = false;
     btnSpin.disabled = false;
     return;
   }
 
   const agent = available[Math.floor(Math.random() * available.length)];
-  showCtrl(null); // hide all controls during spin
+  showCtrl(null);
 
   await animateCaseOpening(agent, state.agents, reelTrack);
 
-  // Record
   state.assignments[player.id] = agent;
   if (!allowDuplicates.checked) state.usedAgents.add(agent.id);
 
-  // Reveal in sidebar
   revealAgentInSidebar(player, agent);
 
-  // Show result text
   const colors = getAgentColorByRole(agent.role);
-  openingResultTxt.textContent = `${player.name}  →  ${agent.name}`;
-  openingResultTxt.style.color = colors.text;
+  openingResultTxt.textContent  = `${player.name}  →  ${agent.name}`;
+  openingResultTxt.style.color  = colors.text;
   openingResult.classList.remove('hidden');
   openingResult.style.animation = 'none';
   void openingResult.offsetWidth;
@@ -194,7 +209,7 @@ async function triggerSpin() {
   showCtrl(isLast ? 'done' : 'reveal');
 
   btnSpin.disabled = false;
-  state.spinning = false;
+  state.spinning   = false;
 }
 
 async function triggerReroll() {
@@ -203,7 +218,6 @@ async function triggerReroll() {
   const player = state.orderedPlayers[state.currentIdx];
   const agent  = state.assignments[player.id];
 
-  // Return current agent to pool
   if (agent && !allowDuplicates.checked) state.usedAgents.delete(agent.id);
   delete state.assignments[player.id];
 
@@ -228,26 +242,18 @@ function finish() {
   showToast('Tirage terminé !');
 }
 
-// ─── Sidebar ─────────────────────────────────────────────────────────────────
+// ─── Sidebar ──────────────────────────────────────────────────────────────────
 function buildSidebar(players) {
   sidebarPlayers.innerHTML = '';
   players.forEach((player, i) => {
     const card = document.createElement('div');
-    card.className = 'sidebar-player';
+    card.className        = 'sidebar-player';
     card.dataset.playerId = player.id;
-    // Start invisible+shifted for cascade animation
-    card.style.opacity = '0';
-    card.style.transform = 'translateX(-14px)';
+    card.style.opacity    = '0';
+    card.style.transform  = 'translateX(-14px)';
     card.innerHTML = `
       <div class="sp-rank">${i + 1}</div>
-      <div class="sp-info">
-        <div class="sp-avatar">
-          <img src="${player.avatar}" alt="${player.name}"
-               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="sp-avatar-fallback" style="display:none">${player.name[0].toUpperCase()}</div>
-        </div>
-        <div class="sp-name">${player.name}</div>
-      </div>
+      <div class="sp-name">${player.name}</div>
       <div class="sp-agent-slot sp-agent-slot--pending">?</div>
     `;
     sidebarPlayers.appendChild(card);
@@ -258,8 +264,8 @@ function revealAgentInSidebar(player, agent) {
   const card = sidebarPlayers.querySelector(`[data-player-id="${player.id}"]`);
   if (!card) return;
   const colors = getAgentColorByRole(agent.role);
-  const slot = card.querySelector('.sp-agent-slot');
-  slot.className = 'sp-agent-slot sp-agent-slot--revealed';
+  const slot   = card.querySelector('.sp-agent-slot');
+  slot.className    = 'sp-agent-slot sp-agent-slot--revealed';
   slot.style.borderColor = colors.border;
   slot.innerHTML = `
     <div class="sp-agent-img">
@@ -277,14 +283,14 @@ function resetSidebarCard(player) {
   const card = sidebarPlayers.querySelector(`[data-player-id="${player.id}"]`);
   if (!card) return;
   const slot = card.querySelector('.sp-agent-slot');
-  slot.className = 'sp-agent-slot sp-agent-slot--pending';
+  slot.className        = 'sp-agent-slot sp-agent-slot--pending';
   slot.style.borderColor = '';
-  slot.textContent = '?';
+  slot.textContent      = '?';
   card.classList.remove('revealed');
   card.classList.add('active');
 }
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 function getAvailableAgents() {
   return state.agents.filter(a => !state.usedAgents.has(a.id));
 }
@@ -320,6 +326,7 @@ function resetAll() {
   hide(openingResult);
   hide(btnReset);
   show(btnStart);
+  show(btnConfig);
   showCtrl('spin');
 
   shuffleCards.innerHTML   = '';

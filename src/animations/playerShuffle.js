@@ -6,14 +6,11 @@ const CARD_H = 165;
 
 function buildCard(player) {
   const el = document.createElement('div');
-  el.className = 'shuffle-card';
+  el.className  = 'shuffle-card';
   el.dataset.id = player.id;
-  el.innerHTML = `
+  el.innerHTML  = `
     <div class="sc-inner">
-      <div class="sc-avatar">
-        <img src="${player.avatar}" alt="${player.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-        <div class="sc-avatar-fallback" style="display:none">${player.name[0].toUpperCase()}</div>
-      </div>
+      <div class="sc-initials">${player.name[0].toUpperCase()}</div>
       <div class="sc-name">${player.name}</div>
     </div>
   `;
@@ -34,14 +31,14 @@ export async function animatePlayerShuffle(players, container) {
   cards.forEach((card, i) => {
     const side = i % 4;
     let startX, startY;
-    if (side === 0) { startX = -200; startY = Math.random() * ah; }
-    else if (side === 1) { startX = aw + 200; startY = Math.random() * ah; }
+    if      (side === 0) { startX = -200;      startY = Math.random() * ah; }
+    else if (side === 1) { startX = aw + 200;  startY = Math.random() * ah; }
     else if (side === 2) { startX = Math.random() * aw; startY = -200; }
-    else { startX = Math.random() * aw; startY = ah + 200; }
+    else                 { startX = Math.random() * aw; startY = ah + 200; }
 
     const stackX = aw / 2 - CARD_W / 2 + (i - (players.length - 1) / 2) * 8;
     const stackY = ah / 2 - CARD_H / 2 + (i - (players.length - 1) / 2) * 4;
-    const rot = (Math.random() - 0.5) * 20;
+    const rot    = (Math.random() - 0.5) * 20;
 
     card.style.cssText = `
       position:absolute;
@@ -56,22 +53,22 @@ export async function animatePlayerShuffle(players, container) {
     `;
     requestAnimationFrame(() => {
       card.style.left = `${stackX}px`;
-      card.style.top = `${stackY}px`;
+      card.style.top  = `${stackY}px`;
     });
   });
 
   await sleep(800 + players.length * 80);
 
-  // Phase 2: shuffle chaos — rapid position swaps
+  // Phase 2: shuffle chaos
   for (let round = 0; round < 4; round++) {
     playShuffleWhoosh();
     cards.forEach(card => {
-      const rx = aw / 2 - CARD_W / 2 + (Math.random() - 0.5) * 180;
-      const ry = ah / 2 - CARD_H / 2 + (Math.random() - 0.5) * 100;
+      const rx  = aw / 2 - CARD_W / 2 + (Math.random() - 0.5) * 180;
+      const ry  = ah / 2 - CARD_H / 2 + (Math.random() - 0.5) * 100;
       const rot = (Math.random() - 0.5) * 40;
       card.style.transition = 'left 0.2s ease, top 0.2s ease, transform 0.2s ease';
-      card.style.left = `${rx}px`;
-      card.style.top = `${ry}px`;
+      card.style.left      = `${rx}px`;
+      card.style.top       = `${ry}px`;
       card.style.transform = `rotate(${rot}deg)`;
     });
     await sleep(250);
@@ -79,27 +76,27 @@ export async function animatePlayerShuffle(players, container) {
 
   await sleep(300);
 
-  // Phase 3: cards fan out in an arc
+  // Phase 3: fan out in arc
   cards.forEach((card, i) => {
-    const total = players.length;
+    const total  = players.length;
     const spread = Math.min(aw * 0.7, 600);
-    const step = spread / (total - 1 || 1);
-    const fx = aw / 2 - spread / 2 + i * step;
-    const fy = ah / 2 - CARD_H / 2 - Math.sin((i / (total - 1)) * Math.PI) * 30;
-    const rot = (i - (total - 1) / 2) * 5;
+    const step   = spread / (total - 1 || 1);
+    const fx     = aw / 2 - spread / 2 + i * step;
+    const fy     = ah / 2 - CARD_H / 2 - Math.sin((i / (total - 1)) * Math.PI) * 30;
+    const rot    = (i - (total - 1) / 2) * 5;
     card.style.transition = 'left 0.5s cubic-bezier(.34,1.56,.64,1), top 0.5s cubic-bezier(.34,1.56,.64,1), transform 0.5s ease';
-    card.style.left = `${fx}px`;
-    card.style.top = `${fy}px`;
-    card.style.transform = `rotate(${rot}deg)`;
-    card.style.zIndex = total - Math.abs(i - (total - 1) / 2);
+    card.style.left       = `${fx}px`;
+    card.style.top        = `${fy}px`;
+    card.style.transform  = `rotate(${rot}deg)`;
+    card.style.zIndex     = total - Math.abs(i - (total - 1) / 2);
   });
 
   await sleep(700);
 
-  // Fade all cards out together
+  // Fade out
   cards.forEach(card => {
     card.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
-    card.style.opacity = '0';
+    card.style.opacity    = '0';
     card.style.transform += ' scale(0.9)';
   });
 
