@@ -15,6 +15,8 @@ const state = {
   usedAgents: new Set(),
   currentIdx: 0,
   spinning: false,
+  manualSelect: false,
+  resumeIdx: -1,
 };
 
 // ─── DOM refs ─────────────────────────────────────────────────────────────────
@@ -77,6 +79,13 @@ function setupControls() {
   });
 
   btnReset.addEventListener('click', resetAll);
+
+  sidebarPlayers.addEventListener('click', e => {
+    const card = e.target.closest('.sidebar-player');
+    if (!card || !card.classList.contains('revealed')) return;
+    const player = state.orderedPlayers.find(p => p.id === card.dataset.playerId);
+    if (player) selectPlayerForReroll(player);
+  });
 
   btnSpin.addEventListener('click', () => triggerSpin());
   btnReroll.addEventListener('click', () => triggerReroll());
@@ -178,6 +187,15 @@ async function triggerSpin() {
   btnSpin.disabled  = true;
 
   const player    = state.orderedPlayers[state.currentIdx];
+
+  // Release previous assignment if rerolling an already-revealed player
+  const prevAgent = state.assignments[player.id];
+  if (prevAgent) {
+    if (!allowDuplicates.checked) state.usedAgents.delete(prevAgent.id);
+    delete state.assignments[player.id];
+    resetSidebarCard(player);
+  }
+
   const available = getAvailableAgents();
 
   if (!available.length) {
@@ -205,11 +223,37 @@ async function triggerSpin() {
   void openingResult.offsetWidth;
   openingResult.style.animation = '';
 
-  const isLast = state.currentIdx === state.orderedPlayers.length - 1;
-  showCtrl(isLast ? 'done' : 'reveal');
+  const nextCtrl = state.manualSelect ? nextCtrlForManual() : (
+    state.currentIdx === state.orderedPlayers.length - 1 ? 'done' : 'reveal'
+  );
+  state.manualSelect = false;
+  showCtrl(nextCtrl);
 
   btnSpin.disabled = false;
   state.spinning   = false;
+}
+
+function nextCtrlForManual() {
+  let ri = state.resumeIdx;
+  while (ri < state.orderedPlayers.length && state.assignments[state.orderedPlayers[ri].id]) ri++;
+  state.resumeIdx = ri;
+  return ri < state.orderedPlayers.length ? 'reveal' : 'done';
+}
+
+function selectPlayerForReroll(player) {
+  if (state.spinning) return;
+
+  const idx = state.orderedPlayers.findIndex(p => p.id === player.id);
+  if (idx === -1) return;
+
+  if (!state.manualSelect) state.resumeIdx = state.currentIdx;
+  state.currentIdx   = idx;
+  state.manualSelect = true;
+
+  loadPlayer(player);
+  hide(openingResult);
+  reelTrack.innerHTML = '';
+  showCtrl(nextCtrlForManual());
 }
 
 async function triggerReroll() {
@@ -230,7 +274,13 @@ async function triggerReroll() {
 }
 
 function advanceToNext() {
-  state.currentIdx++;
+  state.manualSelect = false;
+  if (state.resumeIdx > state.currentIdx) {
+    state.currentIdx = state.resumeIdx;
+    state.resumeIdx  = -1;
+  } else {
+    state.currentIdx++;
+  }
   if (state.currentIdx >= state.orderedPlayers.length) { finish(); return; }
   loadPlayer(state.orderedPlayers[state.currentIdx]);
   showCtrl('spin');
@@ -320,6 +370,8 @@ function resetAll() {
   state.usedAgents     = new Set();
   state.currentIdx     = 0;
   state.spinning       = false;
+  state.manualSelect   = false;
+  state.resumeIdx      = -1;
 
   hide(shuffleSection);
   hide(selectionLayout);

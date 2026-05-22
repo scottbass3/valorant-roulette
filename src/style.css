@@ -187,7 +187,20 @@ body {
   border-color: var(--red);
   background: rgba(255, 70, 85, 0.06);
 }
-.sidebar-player.revealed { opacity: 0.75; }
+.sidebar-player.revealed {
+  opacity: 0.75;
+  cursor: pointer;
+}
+.sidebar-player.revealed:hover {
+  opacity: 1;
+  border-color: var(--text-dim);
+}
+.sidebar-player.revealed.active {
+  opacity: 1;
+  border-color: var(--red);
+  background: rgba(255, 70, 85, 0.06);
+  cursor: default;
+}
 
 .sp-rank {
   font-size: 18px; font-weight: 700;
