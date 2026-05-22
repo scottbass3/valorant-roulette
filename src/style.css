@@ -119,7 +119,8 @@ body {
 }
 .btn-secondary:hover:not(:disabled) { color: var(--red); border-color: var(--red); }
 
-.btn-xl { font-size: 21px; padding: 16px 52px; letter-spacing: 0.14em; }
+.btn-xl   { font-size: 21px; padding: 16px 52px; letter-spacing: 0.14em; }
+.btn-icon { padding: 12px 14px; font-size: 18px; letter-spacing: 0; }
 
 /* ─── Shuffle arena ──────────────────────────────────────────────────────── */
 .shuffle-arena { min-height: 300px; position: relative; }

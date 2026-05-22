@@ -1,6 +1,6 @@
 import { loadData }             from './data/loader.js';
 import { shuffle, sleep }        from './utils/random.js';
-import { resumeAudio, preloadSounds, playShuffleWhoosh } from './utils/sound.js';
+import { resumeAudio, preloadSounds, playShuffleWhoosh, isMuted, setMuted } from './utils/sound.js';
 import { animatePlayerShuffle }  from './animations/playerShuffle.js';
 import { animateCaseOpening }    from './animations/caseOpening.js';
 import { getAgentColorByRole }   from './utils/agentColor.js';
@@ -41,6 +41,7 @@ const btnStart         = $('btn-start');
 const btnReset         = $('btn-reset');
 const btnConfig        = $('btn-config');
 const btnOnboardConfig = $('btn-onboarding-config');
+const btnMute          = $('btn-mute');
 const btnSpin          = $('btn-spin');
 const btnReroll        = $('btn-reroll');
 const btnRerollLast    = $('btn-reroll-last');
@@ -49,6 +50,13 @@ const btnFinish        = $('btn-finish');
 const allowDuplicates  = $('allow-duplicates');
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
+function updateMuteBtn() {
+  const muted = isMuted();
+  btnMute.textContent  = muted ? '🔇' : '🔊';
+  btnMute.title        = t(muted ? 'btn-unmute-title' : 'btn-mute-title');
+  btnMute.setAttribute('aria-label', btnMute.title);
+}
+
 function applyTranslations() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     el.textContent = t(el.dataset.i18n);
@@ -62,6 +70,7 @@ function applyTranslations() {
   document.querySelectorAll('.lang-option').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === getLang());
   });
+  updateMuteBtn();
 }
 
 async function init() {
@@ -109,6 +118,11 @@ function setupControls() {
   });
 
   document.addEventListener('click', () => langDropdown.classList.remove('open'));
+
+  btnMute.addEventListener('click', () => {
+    setMuted(!isMuted());
+    updateMuteBtn();
+  });
 
   document.getElementById('btn-privacy').addEventListener('click', () => openLegalModal('privacy'));
   document.getElementById('btn-legal').addEventListener('click',   () => openLegalModal('legal'));

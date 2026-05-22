@@ -1,6 +1,13 @@
-let ctx = null;
-const rawData = {};    // name → ArrayBuffer (fetched at init, no AudioContext needed)
-const buffers = {};    // name → AudioBuffer  (decoded after first interaction)
+let ctx    = null;
+let muted  = localStorage.getItem('vr_muted') === '1';
+const rawData = {};
+const buffers = {};
+
+export const isMuted  = () => muted;
+export function setMuted(val) {
+  muted = val;
+  localStorage.setItem('vr_muted', val ? '1' : '0');
+}
 
 function getCtx() {
   if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -47,6 +54,7 @@ export async function resumeAudio() {
 
 // ─── Playback ─────────────────────────────────────────────────────────────
 function playBuffer(name, volume = 0.6) {
+  if (muted) return;
   const buf = buffers[name];
   if (!buf) return;
   try {
@@ -63,6 +71,7 @@ function playBuffer(name, volume = 0.6) {
 
 // Synthetic tick fallback when WAV not available
 function playTick(pitch = 880) {
+  if (muted) return;
   try {
     const ac = getCtx();
     const osc  = ac.createOscillator();
@@ -87,6 +96,7 @@ export function playReveal() {
 }
 
 export function playShuffleWhoosh() {
+  if (muted) return;
   try {
     const ac      = getCtx();
     const bufSize = ac.sampleRate * 0.12;

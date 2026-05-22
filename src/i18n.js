@@ -28,6 +28,8 @@ const LOCALES = {
     'config-reset-title':        'Reset',
     'footer-privacy':            'Privacy Policy',
     'footer-legal':              'Legal Notice',
+    'btn-mute-title':            'Mute',
+    'btn-unmute-title':          'Unmute',
   },
   fr: {
     'allow-duplicates-label':    'Autoriser les agents en double',
@@ -58,6 +60,8 @@ const LOCALES = {
     'config-reset-title':        'Réinitialiser',
     'footer-privacy':            'Politique de confidentialité',
     'footer-legal':              'Mentions légales',
+    'btn-mute-title':            'Couper le son',
+    'btn-unmute-title':          'Activer le son',
   },
   de: {
     'allow-duplicates-label':    'Doppelte Agenten erlauben',
@@ -88,6 +92,8 @@ const LOCALES = {
     'config-reset-title':        'Zurücksetzen',
     'footer-privacy':            'Datenschutzerklärung',
     'footer-legal':              'Impressum',
+    'btn-mute-title':            'Stummschalten',
+    'btn-unmute-title':          'Ton einschalten',
   },
   es: {
     'allow-duplicates-label':    'Permitir agentes duplicados',
@@ -118,6 +124,8 @@ const LOCALES = {
     'config-reset-title':        'Restablecer',
     'footer-privacy':            'Política de privacidad',
     'footer-legal':              'Aviso legal',
+    'btn-mute-title':            'Silenciar',
+    'btn-unmute-title':          'Activar sonido',
   },
   it: {
     'allow-duplicates-label':    'Consenti agenti duplicati',
@@ -148,6 +156,8 @@ const LOCALES = {
     'config-reset-title':        'Reimposta',
     'footer-privacy':            'Informativa sulla privacy',
     'footer-legal':              'Note legali',
+    'btn-mute-title':            'Disattiva audio',
+    'btn-unmute-title':          'Attiva audio',
   },
 };
 
