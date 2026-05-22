@@ -15,6 +15,7 @@
   <meta name="twitter:description" content="Randomly assign Valorant agents to your players. Free, open-source fan tool.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7/css/flag-icons.min.css">
   <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
@@ -35,16 +36,16 @@
       <div class="btn-group">
         <div class="lang-dropdown" id="lang-dropdown">
           <button class="lang-trigger" id="lang-trigger" aria-haspopup="listbox">
-            <span id="lang-flag">🇬🇧</span>
+            <span id="lang-flag" class="fi fi-gb"></span>
             <span id="lang-code">EN</span>
             <span class="lang-chevron">▾</span>
           </button>
           <div class="lang-menu" id="lang-menu" role="listbox">
-            <button class="lang-option" data-lang="en" role="option">🇬🇧 <span>EN</span></button>
-            <button class="lang-option" data-lang="fr" role="option">🇫🇷 <span>FR</span></button>
-            <button class="lang-option" data-lang="de" role="option">🇩🇪 <span>DE</span></button>
-            <button class="lang-option" data-lang="es" role="option">🇪🇸 <span>ES</span></button>
-            <button class="lang-option" data-lang="it" role="option">🇮🇹 <span>IT</span></button>
+            <button class="lang-option" data-lang="en" role="option"><span class="fi fi-gb"></span> <span>EN</span></button>
+            <button class="lang-option" data-lang="fr" role="option"><span class="fi fi-fr"></span> <span>FR</span></button>
+            <button class="lang-option" data-lang="de" role="option"><span class="fi fi-de"></span> <span>DE</span></button>
+            <button class="lang-option" data-lang="es" role="option"><span class="fi fi-es"></span> <span>ES</span></button>
+            <button class="lang-option" data-lang="it" role="option"><span class="fi fi-it"></span> <span>IT</span></button>
           </div>
         </div>
         <button id="btn-mute" class="btn btn-icon btn-secondary" aria-label="Mute">🔊</button>

@@ -162,11 +162,11 @@ const LOCALES = {
 };
 
 export const LANG_META = {
-  en: { flag: '🇬🇧', label: 'EN' },
-  fr: { flag: '🇫🇷', label: 'FR' },
-  de: { flag: '🇩🇪', label: 'DE' },
-  es: { flag: '🇪🇸', label: 'ES' },
-  it: { flag: '🇮🇹', label: 'IT' },
+  en: { flag: 'gb', label: 'EN' },
+  fr: { flag: 'fr', label: 'FR' },
+  de: { flag: 'de', label: 'DE' },
+  es: { flag: 'es', label: 'ES' },
+  it: { flag: 'it', label: 'IT' },
 };
 
 export const LANGS = ['en', 'fr', 'de', 'es', 'it'];

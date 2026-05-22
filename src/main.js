@@ -65,7 +65,7 @@ function applyTranslations() {
     el.innerHTML = t(el.dataset.i18nHtml);
   });
   const meta = LANG_META[getLang()];
-  document.getElementById('lang-flag').textContent = meta.flag;
+  document.getElementById('lang-flag').className = `fi fi-${meta.flag}`;
   document.getElementById('lang-code').textContent = meta.label;
   document.querySelectorAll('.lang-option').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === getLang());
