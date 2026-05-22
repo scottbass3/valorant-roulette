@@ -64,7 +64,7 @@ const CONTENT = {
       title: 'Legal Notice',
       sections: [
         { h: 'About',
-          p: 'Valorant Roulette is a free, open-source fan tool for randomly assigning Valorant agents to players. It is not affiliated with, endorsed by, or connected to Riot Games in any way.' },
+          p: 'Agent Roulette is a free, open-source fan tool for randomly assigning Valorant agents to players. It is not affiliated with, endorsed by, or connected to Riot Games in any way.' },
         { h: 'Author',
           p: 'Created by scottbass3. Source code is available on GitHub under the MIT License.' },
         { h: 'Hosting',
@@ -77,7 +77,7 @@ const CONTENT = {
       title: 'Mentions légales',
       sections: [
         { h: 'Présentation',
-          p: 'Valorant Roulette est un outil fan gratuit et open-source permettant d\'attribuer aléatoirement des agents Valorant aux joueurs. Il n\'est ni affilié, ni approuvé, ni lié à Riot Games.' },
+          p: 'Agent Roulette est un outil fan gratuit et open-source permettant d\'attribuer aléatoirement des agents Valorant aux joueurs. Il n\'est ni affilié, ni approuvé, ni lié à Riot Games.' },
         { h: 'Auteur',
           p: 'Créé par scottbass3. Le code source est disponible sur GitHub sous licence MIT.' },
         { h: 'Hébergement',
@@ -90,7 +90,7 @@ const CONTENT = {
       title: 'Impressum',
       sections: [
         { h: 'Über die Anwendung',
-          p: 'Valorant Roulette ist ein kostenloses Open-Source-Fan-Tool zur zufälligen Zuweisung von Valorant-Agenten. Es ist weder mit Riot Games verbunden noch von Riot Games genehmigt.' },
+          p: 'Agent Roulette ist ein kostenloses Open-Source-Fan-Tool zur zufälligen Zuweisung von Valorant-Agenten. Es ist weder mit Riot Games verbunden noch von Riot Games genehmigt.' },
         { h: 'Autor',
           p: 'Erstellt von scottbass3. Der Quellcode ist auf GitHub unter der MIT-Lizenz verfügbar.' },
         { h: 'Hosting',
@@ -103,7 +103,7 @@ const CONTENT = {
       title: 'Aviso legal',
       sections: [
         { h: 'Sobre la aplicación',
-          p: 'Valorant Roulette es una herramienta fan gratuita y de código abierto para asignar agentes de Valorant aleatoriamente. No está afiliada, respaldada ni conectada a Riot Games de ningún modo.' },
+          p: 'Agent Roulette es una herramienta fan gratuita y de código abierto para asignar agentes de Valorant aleatoriamente. No está afiliada, respaldada ni conectada a Riot Games de ningún modo.' },
         { h: 'Autor',
           p: 'Creado por scottbass3. El código fuente está disponible en GitHub bajo la licencia MIT.' },
         { h: 'Alojamiento',
@@ -116,7 +116,7 @@ const CONTENT = {
       title: 'Note legali',
       sections: [
         { h: 'Informazioni',
-          p: "Valorant Roulette è uno strumento fan gratuito e open-source per assegnare casualmente agenti Valorant ai giocatori. Non è affiliato, approvato né collegato a Riot Games in alcun modo." },
+          p: "Agent Roulette è uno strumento fan gratuito e open-source per assegnare casualmente agenti Valorant ai giocatori. Non è affiliato, approvato né collegato a Riot Games in alcun modo." },
         { h: 'Autore',
           p: 'Creato da scottbass3. Il codice sorgente è disponibile su GitHub sotto licenza MIT.' },
         { h: 'Hosting',
