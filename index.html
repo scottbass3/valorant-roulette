@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,16 +21,26 @@
     <section id="controls" class="section controls">
       <label class="option-label">
         <input type="checkbox" id="allow-duplicates">
-        <span>Autoriser les agents en double</span>
+        <span data-i18n="allow-duplicates-label">Autoriser les agents en double</span>
       </label>
       <div class="btn-group">
-        <button id="btn-config" class="btn btn-secondary">⚙&nbsp; CONFIG</button>
-        <button id="btn-start" class="btn btn-primary">
-          ▶&nbsp; LANCER LE TIRAGE
-        </button>
-        <button id="btn-reset" class="btn btn-secondary hidden">
-          ↺&nbsp; RECOMMENCER
-        </button>
+        <div class="lang-dropdown" id="lang-dropdown">
+          <button class="lang-trigger" id="lang-trigger" aria-haspopup="listbox">
+            <span id="lang-flag">🇬🇧</span>
+            <span id="lang-code">EN</span>
+            <span class="lang-chevron">▾</span>
+          </button>
+          <div class="lang-menu" id="lang-menu" role="listbox">
+            <button class="lang-option" data-lang="en" role="option">🇬🇧 <span>EN</span></button>
+            <button class="lang-option" data-lang="fr" role="option">🇫🇷 <span>FR</span></button>
+            <button class="lang-option" data-lang="de" role="option">🇩🇪 <span>DE</span></button>
+            <button class="lang-option" data-lang="es" role="option">🇪🇸 <span>ES</span></button>
+            <button class="lang-option" data-lang="it" role="option">🇮🇹 <span>IT</span></button>
+          </div>
+        </div>
+        <button id="btn-config" class="btn btn-secondary" data-i18n="btn-config">⚙ CONFIG</button>
+        <button id="btn-start" class="btn btn-primary" data-i18n="btn-start">▶ LANCER LE TIRAGE</button>
+        <button id="btn-reset" class="btn btn-secondary hidden" data-i18n="btn-reset">↺ RECOMMENCER</button>
       </div>
     </section>
 
@@ -38,17 +48,17 @@
     <section id="onboarding" class="section onboarding hidden">
       <div class="onboarding-inner">
         <div class="onboarding-icon">👥</div>
-        <h2 class="onboarding-title">Aucun joueur configuré</h2>
-        <p class="onboarding-desc">Ajoutez vos joueurs pour commencer le tirage.</p>
-        <button id="btn-onboarding-config" class="btn btn-primary">
-          ⚙&nbsp; CONFIGURER LES JOUEURS
+        <h2 class="onboarding-title" data-i18n="onboarding-title">Aucun joueur configuré</h2>
+        <p class="onboarding-desc" data-i18n="onboarding-desc">Ajoutez vos joueurs pour commencer le tirage.</p>
+        <button id="btn-onboarding-config" class="btn btn-primary" data-i18n="btn-onboarding-config">
+          ⚙ CONFIGURER LES JOUEURS
         </button>
       </div>
     </section>
 
     <!-- ── Full-width shuffle animation ───────────────────────────────── -->
     <section id="shuffle-section" class="section hidden">
-      <h2 class="section-title">ORDRE DES JOUEURS</h2>
+      <h2 class="section-title" data-i18n="shuffle-section-title">ORDRE DES JOUEURS</h2>
       <div id="shuffle-arena" class="shuffle-arena">
         <div id="shuffle-cards" class="shuffle-cards"></div>
       </div>
@@ -58,7 +68,7 @@
     <div id="selection-layout" class="selection-layout hidden">
 
       <aside id="players-sidebar" class="players-sidebar">
-        <h2 class="section-title">ORDRE DU TIRAGE</h2>
+        <h2 class="section-title" data-i18n="sidebar-title">ORDRE DU TIRAGE</h2>
         <div id="sidebar-players"></div>
       </aside>
 
@@ -88,28 +98,18 @@
         <div id="roulette-controls" class="roulette-controls">
 
           <div id="ctrl-spin" class="ctrl-state">
-            <button id="btn-spin" class="btn btn-primary btn-xl">
-              ▶&nbsp; LANCER
-            </button>
-            <span class="spin-hint">ou appuyez sur <kbd>Espace</kbd></span>
+            <button id="btn-spin" class="btn btn-primary btn-xl" data-i18n="btn-spin">▶ LANCER</button>
+            <span class="spin-hint" data-i18n-html="spin-hint-html">ou appuyez sur <kbd>Espace</kbd></span>
           </div>
 
           <div id="ctrl-reveal" class="ctrl-state hidden">
-            <button id="btn-reroll" class="btn btn-secondary">
-              ↺&nbsp; RE-TIRER
-            </button>
-            <button id="btn-next" class="btn btn-primary">
-              SUIVANT &nbsp;→
-            </button>
+            <button id="btn-reroll" class="btn btn-secondary" data-i18n="btn-reroll">↺ RE-TIRER</button>
+            <button id="btn-next" class="btn btn-primary" data-i18n="btn-next">SUIVANT →</button>
           </div>
 
           <div id="ctrl-done" class="ctrl-state hidden">
-            <button id="btn-reroll-last" class="btn btn-secondary">
-              ↺&nbsp; RE-TIRER
-            </button>
-            <button id="btn-finish" class="btn btn-primary">
-              ✓&nbsp; TERMINER
-            </button>
+            <button id="btn-reroll-last" class="btn btn-secondary" data-i18n="btn-reroll-last">↺ RE-TIRER</button>
+            <button id="btn-finish" class="btn btn-primary" data-i18n="btn-finish">✓ TERMINER</button>
           </div>
 
         </div>

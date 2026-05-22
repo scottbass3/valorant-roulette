@@ -1,3 +1,5 @@
+import { t } from './i18n.js';
+
 const KEYS = {
   agentNames: 'vr_agent_names',
   players:    'vr_players',
@@ -37,8 +39,10 @@ export function openConfigModal(agents, { onPlayersChange, onAgentNameChange }) 
   _agents    = agents;
   _callbacks = { onPlayersChange, onAgentNameChange };
 
-  let modal = document.getElementById('config-modal');
-  if (!modal) modal = buildModal();
+  // Rebuild modal so strings reflect current language
+  const existing = document.getElementById('config-modal');
+  if (existing) existing.remove();
+  const modal = buildModal();
 
   switchTab(modal, 'players');
   refreshPlayersPane();
@@ -60,8 +64,8 @@ function buildModal() {
     <div class="config-panel">
       <div class="config-header">
         <div class="config-tabs">
-          <button class="config-tab active" data-tab="players">JOUEURS</button>
-          <button class="config-tab" data-tab="agents">AGENTS</button>
+          <button class="config-tab active" data-tab="players">${t('config-tab-players')}</button>
+          <button class="config-tab" data-tab="agents">${t('config-tab-agents')}</button>
         </div>
         <button class="config-close">✕</button>
       </div>
@@ -70,12 +74,12 @@ function buildModal() {
           <div id="config-player-list" class="config-player-list"></div>
           <div class="config-add-row">
             <input id="config-new-player" class="config-input" type="text"
-                   placeholder="Nom du joueur..." maxlength="32">
-            <button class="btn btn-primary" id="config-btn-add">+ AJOUTER</button>
+                   placeholder="${t('config-player-placeholder')}" maxlength="32">
+            <button class="btn btn-primary" id="config-btn-add">${t('config-add-btn')}</button>
           </div>
         </div>
         <div class="config-pane hidden" data-pane="agents">
-          <p class="config-note">Laissez vide pour conserver le nom officiel.</p>
+          <p class="config-note">${t('config-agents-note')}</p>
           <div id="config-agent-list" class="config-agent-list"></div>
         </div>
       </div>
@@ -114,7 +118,7 @@ function refreshPlayersPane() {
   list.innerHTML = '';
 
   if (!players.length) {
-    list.innerHTML = '<p class="config-empty">Aucun joueur configuré.</p>';
+    list.innerHTML = `<p class="config-empty">${t('config-players-empty')}</p>`;
     return;
   }
 
@@ -125,7 +129,7 @@ function refreshPlayersPane() {
       <span class="config-rank">${i + 1}</span>
       <input class="config-input" type="text" value="${esc(player.name)}"
              maxlength="32" data-id="${player.id}">
-      <button class="config-del" data-id="${player.id}" title="Supprimer">✕</button>
+      <button class="config-del" data-id="${player.id}" title="${t('config-delete-title')}">✕</button>
     `;
     list.appendChild(row);
   });
@@ -181,7 +185,7 @@ function refreshAgentsPane() {
                value="${esc(custom)}" placeholder="${esc(agent.canonicalName)}"
                maxlength="32" data-id="${agent.id}">
         <button class="config-reset" data-id="${agent.id}"
-                title="Réinitialiser" ${custom ? '' : 'disabled'}>↺</button>
+                title="${t('config-reset-title')}" ${custom ? '' : 'disabled'}>↺</button>
       `;
       group.appendChild(row);
     });

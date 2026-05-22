@@ -5,6 +5,7 @@ import { animatePlayerShuffle }  from './animations/playerShuffle.js';
 import { animateCaseOpening }    from './animations/caseOpening.js';
 import { getAgentColorByRole }   from './utils/agentColor.js';
 import { openConfigModal }       from './config.js';
+import { t, getLang, setLang, LANG_META } from './i18n.js';
 
 // ─── State ────────────────────────────────────────────────────────────────────
 const state = {
@@ -47,10 +48,26 @@ const btnFinish        = $('btn-finish');
 const allowDuplicates  = $('allow-duplicates');
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
+function applyTranslations() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    el.innerHTML = t(el.dataset.i18nHtml);
+  });
+  const meta = LANG_META[getLang()];
+  document.getElementById('lang-flag').textContent = meta.flag;
+  document.getElementById('lang-code').textContent = meta.label;
+  document.querySelectorAll('.lang-option').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.lang === getLang());
+  });
+}
+
 async function init() {
   const [data] = await Promise.all([loadData(), preloadSounds()]);
   state.players = data.players;
   state.agents  = data.agents;
+  applyTranslations();
   setupControls();
   updateOnboarding();
 }
@@ -69,6 +86,28 @@ function setupControls() {
         if (agent) agent.name = name ?? agent.canonicalName;
       },
     });
+
+  const langDropdown = document.getElementById('lang-dropdown');
+  const langTrigger  = document.getElementById('lang-trigger');
+  const langMenu     = document.getElementById('lang-menu');
+
+  langTrigger.addEventListener('click', e => {
+    e.stopPropagation();
+    langDropdown.classList.toggle('open');
+  });
+
+  langMenu.querySelectorAll('.lang-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      langDropdown.classList.remove('open');
+      if (btn.dataset.lang === getLang()) return;
+      setLang(btn.dataset.lang);
+      applyTranslations();
+      const modal = document.getElementById('config-modal');
+      if (modal) modal.classList.add('hidden');
+    });
+  });
+
+  document.addEventListener('click', () => langDropdown.classList.remove('open'));
 
   btnConfig.addEventListener('click', openConfig);
   btnOnboardConfig.addEventListener('click', openConfig);
@@ -112,7 +151,7 @@ function setupControls() {
 async function startDraw() {
   if (state.spinning) return;
   if (!state.players.length) {
-    showToast('Configurez au moins un joueur !');
+    showToast(t('toast-no-players'));
     return;
   }
 
@@ -199,7 +238,7 @@ async function triggerSpin() {
   const available = getAvailableAgents();
 
   if (!available.length) {
-    showToast('Plus d\'agents disponibles !');
+    showToast(t('toast-no-agents'));
     state.spinning   = false;
     btnSpin.disabled = false;
     return;
@@ -289,7 +328,7 @@ function advanceToNext() {
 function finish() {
   showCtrl(null);
   hide(openingResult);
-  showToast('Tirage terminé !');
+  showToast(t('toast-done'));
 }
 
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
