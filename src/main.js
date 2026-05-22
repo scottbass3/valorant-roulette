@@ -6,6 +6,7 @@ import { animateCaseOpening }    from './animations/caseOpening.js';
 import { getAgentColorByRole }   from './utils/agentColor.js';
 import { openConfigModal }       from './config.js';
 import { t, getLang, setLang, LANG_META } from './i18n.js';
+import { openLegalModal }        from './legal.js';
 
 // ─── State ────────────────────────────────────────────────────────────────────
 const state = {
@@ -108,6 +109,9 @@ function setupControls() {
   });
 
   document.addEventListener('click', () => langDropdown.classList.remove('open'));
+
+  document.getElementById('btn-privacy').addEventListener('click', () => openLegalModal('privacy'));
+  document.getElementById('btn-legal').addEventListener('click',   () => openLegalModal('legal'));
 
   btnConfig.addEventListener('click', openConfig);
   btnOnboardConfig.addEventListener('click', openConfig);

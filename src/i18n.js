@@ -26,6 +26,8 @@ const LOCALES = {
     'config-add-btn':            '+ ADD',
     'config-delete-title':       'Delete',
     'config-reset-title':        'Reset',
+    'footer-privacy':            'Privacy Policy',
+    'footer-legal':              'Legal Notice',
   },
   fr: {
     'allow-duplicates-label':    'Autoriser les agents en double',
@@ -54,6 +56,8 @@ const LOCALES = {
     'config-add-btn':            '+ AJOUTER',
     'config-delete-title':       'Supprimer',
     'config-reset-title':        'Réinitialiser',
+    'footer-privacy':            'Politique de confidentialité',
+    'footer-legal':              'Mentions légales',
   },
   de: {
     'allow-duplicates-label':    'Doppelte Agenten erlauben',
@@ -82,6 +86,8 @@ const LOCALES = {
     'config-add-btn':            '+ HINZUFÜGEN',
     'config-delete-title':       'Löschen',
     'config-reset-title':        'Zurücksetzen',
+    'footer-privacy':            'Datenschutzerklärung',
+    'footer-legal':              'Impressum',
   },
   es: {
     'allow-duplicates-label':    'Permitir agentes duplicados',
@@ -110,6 +116,8 @@ const LOCALES = {
     'config-add-btn':            '+ AÑADIR',
     'config-delete-title':       'Eliminar',
     'config-reset-title':        'Restablecer',
+    'footer-privacy':            'Política de privacidad',
+    'footer-legal':              'Aviso legal',
   },
   it: {
     'allow-duplicates-label':    'Consenti agenti duplicati',
@@ -138,6 +146,8 @@ const LOCALES = {
     'config-add-btn':            '+ AGGIUNGI',
     'config-delete-title':       'Elimina',
     'config-reset-title':        'Reimposta',
+    'footer-privacy':            'Informativa sulla privacy',
+    'footer-legal':              'Note legali',
   },
 };
 
