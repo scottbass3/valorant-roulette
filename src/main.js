@@ -164,6 +164,7 @@ async function startDraw() {
   state.usedAgents     = new Set();
   state.currentIdx     = 0;
 
+  showCtrl(null);
   hide(btnStart);
   hide(btnConfig);
   show(btnReset);
