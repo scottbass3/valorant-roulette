@@ -4,7 +4,7 @@ import { resumeAudio, preloadSounds, playShuffleWhoosh, isMuted, setMuted } from
 import { animatePlayerShuffle }  from './animations/playerShuffle.js';
 import { animateCaseOpening }    from './animations/caseOpening.js';
 import { getAgentColorByRole }   from './utils/agentColor.js';
-import { openConfigModal }       from './config.js';
+import { openConfigModal, getPlayerBans } from './config.js';
 import { t, getLang, setLang, LANG_META } from './i18n.js';
 import { openLegalModal }        from './legal.js';
 
@@ -254,7 +254,7 @@ async function triggerSpin() {
     resetSidebarCard(player);
   }
 
-  const available = getAvailableAgents();
+  const available = getAvailableAgents(player);
 
   if (!available.length) {
     showToast(t('toast-no-agents'));
@@ -399,8 +399,9 @@ function resetSidebarCard(player) {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-function getAvailableAgents() {
-  return state.agents.filter(a => !state.usedAgents.has(a.id));
+function getAvailableAgents(player) {
+  const banned = new Set(getPlayerBans()[player.id] || []);
+  return state.agents.filter(a => !state.usedAgents.has(a.id) && !banned.has(a.id));
 }
 
 function showCtrl(name) {

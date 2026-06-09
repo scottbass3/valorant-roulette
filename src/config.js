@@ -3,6 +3,7 @@ import { t } from './i18n.js';
 const KEYS = {
   agentNames: 'vr_agent_names',
   players:    'vr_players',
+  playerBans: 'vr_player_bans',
 };
 
 // ─── Storage ──────────────────────────────────────────────────────────────────
@@ -28,6 +29,36 @@ export function getStoredPlayers() {
 
 export function storePlayers(players) {
   localStorage.setItem(KEYS.players, JSON.stringify(players));
+}
+
+// Banned agents, keyed by player id → [agentId, …]
+export function getPlayerBans() {
+  try { return JSON.parse(localStorage.getItem(KEYS.playerBans) || '{}'); }
+  catch { return {}; }
+}
+
+function storePlayerBans(bans) {
+  localStorage.setItem(KEYS.playerBans, JSON.stringify(bans));
+}
+
+function setPlayerBan(playerId, agentId, banned) {
+  const bans = getPlayerBans();
+  const set  = new Set(bans[playerId] || []);
+  if (banned) set.add(agentId); else set.delete(agentId);
+  if (set.size) bans[playerId] = [...set]; else delete bans[playerId];
+  storePlayerBans(bans);
+}
+
+function setAllBans(playerId, agentIds) {
+  const bans = getPlayerBans();
+  if (agentIds && agentIds.length) bans[playerId] = [...agentIds];
+  else delete bans[playerId];
+  storePlayerBans(bans);
+}
+
+function clearPlayerBans(playerId) {
+  const bans = getPlayerBans();
+  if (bans[playerId]) { delete bans[playerId]; storePlayerBans(bans); }
 }
 
 // ─── Modal ────────────────────────────────────────────────────────────────────
@@ -122,16 +153,26 @@ function refreshPlayersPane() {
     return;
   }
 
+  const bans = getPlayerBans();
+
   players.forEach((player, i) => {
-    const row = document.createElement('div');
-    row.className = 'config-player-row';
-    row.innerHTML = `
-      <span class="config-rank">${i + 1}</span>
-      <input class="config-input" type="text" value="${esc(player.name)}"
-             maxlength="32" data-id="${player.id}">
-      <button class="config-del" data-id="${player.id}" title="${t('config-delete-title')}">✕</button>
+    const banCount = (bans[player.id] || []).length;
+    const item = document.createElement('div');
+    item.className = 'config-player-item';
+    item.innerHTML = `
+      <div class="config-player-row">
+        <span class="config-rank">${i + 1}</span>
+        <input class="config-input" type="text" value="${esc(player.name)}"
+               maxlength="32" data-id="${player.id}">
+        <button class="config-bans-toggle ${banCount ? 'has-bans' : ''}" data-id="${player.id}"
+                title="${t('config-bans-toggle-title')}">
+          🚫 <span class="config-bans-count">${banCount || ''}</span>
+        </button>
+        <button class="config-del" data-id="${player.id}" title="${t('config-delete-title')}">✕</button>
+      </div>
+      <div class="config-bans-panel hidden" data-panel-id="${player.id}"></div>
     `;
-    list.appendChild(row);
+    list.appendChild(item);
   });
 
   list.querySelectorAll('input[data-id]').forEach(inp => {
@@ -148,14 +189,86 @@ function refreshPlayersPane() {
     });
   });
 
+  list.querySelectorAll('.config-bans-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const panel = list.querySelector(`.config-bans-panel[data-panel-id="${btn.dataset.id}"]`);
+      if (panel.classList.contains('hidden')) {
+        renderBansPanel(btn.dataset.id, panel);
+        panel.classList.remove('hidden');
+        btn.classList.add('open');
+      } else {
+        panel.classList.add('hidden');
+        btn.classList.remove('open');
+      }
+    });
+  });
+
   list.querySelectorAll('.config-del').forEach(btn => {
     btn.addEventListener('click', () => {
       const players = (getStoredPlayers() || []).filter(p => p.id !== btn.dataset.id);
       storePlayers(players);
+      clearPlayerBans(btn.dataset.id);
       refreshPlayersPane();
       _callbacks.onPlayersChange?.(players);
     });
   });
+}
+
+function renderBansPanel(playerId, panel) {
+  const banned = new Set(getPlayerBans()[playerId] || []);
+  const roles  = [...new Set(_agents.map(a => a.role))];
+
+  const groups = roles.map(role => {
+    const chips = _agents.filter(a => a.role === role).map(agent => `
+      <button class="config-ban-chip ${banned.has(agent.id) ? 'banned' : ''}"
+              data-agent-id="${agent.id}" aria-pressed="${banned.has(agent.id)}">
+        <img src="${agent.image}" alt="" onerror="this.style.display='none'">
+        <span>${esc(agent.name)}</span>
+      </button>`).join('');
+    return `
+      <div class="config-bans-group">
+        <div class="config-bans-role">${esc(role)}</div>
+        <div class="config-bans-chips">${chips}</div>
+      </div>`;
+  }).join('');
+
+  panel.innerHTML = `
+    <div class="config-bans-actions">
+      <button class="config-ban-all">${t('config-bans-all')}</button>
+      <button class="config-ban-reset">${t('config-bans-reset')}</button>
+    </div>
+    <div class="config-bans-groups">${groups}</div>
+  `;
+
+  panel.querySelectorAll('.config-ban-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const nowBanned = !chip.classList.contains('banned');
+      setPlayerBan(playerId, chip.dataset.agentId, nowBanned);
+      chip.classList.toggle('banned', nowBanned);
+      chip.setAttribute('aria-pressed', String(nowBanned));
+      updateBansCount(playerId);
+    });
+  });
+
+  panel.querySelector('.config-ban-all').addEventListener('click', () => {
+    setAllBans(playerId, _agents.map(a => a.id));
+    renderBansPanel(playerId, panel);
+    updateBansCount(playerId);
+  });
+
+  panel.querySelector('.config-ban-reset').addEventListener('click', () => {
+    setAllBans(playerId, []);
+    renderBansPanel(playerId, panel);
+    updateBansCount(playerId);
+  });
+}
+
+function updateBansCount(playerId) {
+  const btn = document.querySelector(`.config-bans-toggle[data-id="${playerId}"]`);
+  if (!btn) return;
+  const count = (getPlayerBans()[playerId] || []).length;
+  btn.classList.toggle('has-bans', count > 0);
+  btn.querySelector('.config-bans-count').textContent = count || '';
 }
 
 function refreshAgentsPane() {

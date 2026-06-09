@@ -577,6 +577,94 @@ body {
   padding: 8px 0;
 }
 
+/* Per-player agent bans */
+.config-player-item { display: flex; flex-direction: column; gap: 8px; }
+.config-bans-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text-dim);
+  font-family: var(--font);
+  font-size: 14px;
+  padding: 6px 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.config-bans-toggle:hover     { color: var(--red); border-color: var(--red); }
+.config-bans-toggle.has-bans  { color: var(--red); border-color: var(--red); }
+.config-bans-toggle.open      { background: var(--bg3); }
+.config-bans-count { font-weight: 700; font-size: 13px; line-height: 1; }
+
+.config-bans-panel {
+  margin-left: 32px;
+  padding: 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.config-bans-actions { display: flex; gap: 8px; }
+.config-ban-all,
+.config-ban-reset {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text-dim);
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.config-ban-all:hover   { color: var(--red); border-color: var(--red); }
+.config-ban-reset:hover { color: var(--text); border-color: var(--text-dim); }
+
+.config-bans-groups { display: flex; flex-direction: column; gap: 12px; }
+.config-bans-group  { display: flex; flex-direction: column; gap: 8px; }
+.config-bans-role {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+}
+.config-bans-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.config-ban-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 12px 4px 4px;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.config-ban-chip img {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--bg3);
+  flex-shrink: 0;
+}
+.config-ban-chip:hover { border-color: var(--text-dim); }
+.config-ban-chip.banned {
+  border-color: var(--red);
+  background: color-mix(in srgb, var(--red) 14%, transparent);
+  color: var(--text-dim);
+}
+.config-ban-chip.banned span { text-decoration: line-through; }
+
 /* Agents pane */
 .config-note {
   font-size: 14px;
