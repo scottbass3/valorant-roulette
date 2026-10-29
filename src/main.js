@@ -3,6 +3,7 @@ import { shuffle, sleep }        from './utils/random.js';
 import { resumeAudio, preloadSounds, playShuffleWhoosh, isMuted, setMuted } from './utils/sound.js';
 import { animatePlayerShuffle }  from './animations/playerShuffle.js';
 import { animateCaseOpening }    from './animations/caseOpening.js';
+import { showResultsShowcase }   from './animations/resultsShowcase.js';
 import { getAgentColorByRole }   from './utils/agentColor.js';
 import { openConfigModal, getPlayerBans } from './config.js';
 import { t, getLang, setLang, LANG_META } from './i18n.js';
@@ -347,7 +348,7 @@ function advanceToNext() {
 function finish() {
   showCtrl(null);
   hide(openingResult);
-  showToast(t('toast-done'));
+  showResultsShowcase(state.orderedPlayers, state.assignments, { onRestart: resetAll });
 }
 
 // ─── Sidebar ──────────────────────────────────────────────────────────────────

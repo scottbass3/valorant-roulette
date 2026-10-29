@@ -69,6 +69,17 @@ function easeOutQuint(t) {
   return 1 - Math.pow(1 - t, 5);
 }
 
+// Bloom a soft, role-coloured light over the reel on reveal.
+// Returns the element so the caller can remove it afterwards.
+function spawnRevealFlash(wrapper) {
+  const flash = document.createElement('div');
+  flash.className = 'reel-flash';
+  wrapper.appendChild(flash);
+  void flash.offsetWidth;        // force reflow so the animation plays from the start
+  flash.classList.add('bloom');
+  return flash;
+}
+
 export async function animateCaseOpening(agent, allAgents, track) {
   await resumeAudio();
 
@@ -153,11 +164,7 @@ export async function animateCaseOpening(agent, allAgents, track) {
   winner.classList.add('reel-card--selected');
   cursor?.classList.add('hit');
 
-  const flash = document.createElement('div');
-  flash.className = 'reel-flash';
-  wrapper.appendChild(flash);
-  void flash.offsetWidth;        // force reflow so the animation plays from the start
-  flash.classList.add('bloom');
+  const flash = spawnRevealFlash(wrapper);
 
   playReveal();
 
