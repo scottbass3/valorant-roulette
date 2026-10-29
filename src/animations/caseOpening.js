@@ -8,6 +8,10 @@ const CARD_STEP   = CARD_WIDTH + CARD_MARGIN * 2;
 const REEL_COUNT  = 50;
 const STOP_INDEX  = 42;
 const DURATION    = 6000;
+const MAX_BLUR    = 5;   // px of motion blur at peak reel speed
+
+const reduceMotion = typeof matchMedia === 'function'
+  && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function buildAgentCard(agent) {
   const colors = getAgentColorByRole(agent.role);
@@ -60,12 +64,25 @@ function buildReel(allAgents, target) {
   return reel;
 }
 
-function easeOutCubic(t) {
-  return 1 - Math.pow(1 - t, 3);
+// Quintic ease-out: fast launch, long graceful settle — slot-machine feel.
+function easeOutQuint(t) {
+  return 1 - Math.pow(1 - t, 5);
 }
 
 export async function animateCaseOpening(agent, allAgents, track) {
   await resumeAudio();
+
+  const container = track.parentElement;      // .reel-container
+  const wrapper   = container.parentElement;  // .reel-wrapper
+  const cursor    = wrapper.querySelector('.reel-cursor');
+  const winColor  = getAgentColorByRole(agent.role).border;
+
+  // Reset any leftover reveal state from a previous spin
+  container.classList.remove('revealing');
+  cursor?.classList.remove('hit');
+  wrapper.querySelector('.reel-flash')?.remove();
+  wrapper.style.setProperty('--win', winColor);
+  track.style.filter = '';
   track.innerHTML = '';
 
   const reel = buildReel(allAgents, agent);
@@ -74,7 +91,6 @@ export async function animateCaseOpening(agent, allAgents, track) {
   // Wait one frame so the browser has recalculated layout after cards were inserted
   await new Promise(r => requestAnimationFrame(r));
 
-  const container = track.parentElement;
   const viewW = container.getBoundingClientRect().width || container.offsetWidth || 800;
   const centerX = viewW / 2;
 
@@ -93,14 +109,23 @@ export async function animateCaseOpening(agent, allAgents, track) {
   const totalMove = finalOffset - startX;
   const startTime = performance.now();
   let lastCardIdx = -1;
+  let prevX = startX;
 
   await new Promise(resolve => {
     function frame(now) {
       const t      = Math.min((now - startTime) / DURATION, 1);
-      const eased  = easeOutCubic(t);
+      const eased  = easeOutQuint(t);
       const currentX = startX + totalMove * eased;
 
       track.style.transform = `translateX(${currentX}px)`;
+
+      // Velocity-based motion blur: the reel smears while fast, snaps crisp as it settles
+      if (!reduceMotion) {
+        const velocity = Math.abs(currentX - prevX);
+        const blur = Math.min(velocity * 0.06, MAX_BLUR);
+        track.style.filter = blur > 0.3 ? `blur(${blur.toFixed(2)}px)` : '';
+      }
+      prevX = currentX;
 
       // Which card is currently centered under the cursor?
       const cardIdx = Math.floor((centerX - currentX) / CARD_STEP);
@@ -113,16 +138,30 @@ export async function animateCaseOpening(agent, allAgents, track) {
         requestAnimationFrame(frame);
       } else {
         track.style.transform = `translateX(${finalOffset}px)`;
+        track.style.filter = '';
         resolve();
       }
     }
     requestAnimationFrame(frame);
   });
 
-  // Highlight the winning card
-  const cards = track.querySelectorAll('.reel-card');
-  cards[STOP_INDEX].classList.add('reel-card--selected');
+  // ─── Reveal: spotlight the winner, dim the rest, bloom a role-coloured flash ───
+  const cards  = track.querySelectorAll('.reel-card');
+  const winner = cards[STOP_INDEX];
+  winner.style.setProperty('--win', winColor);
+  container.classList.add('revealing');
+  winner.classList.add('reel-card--selected');
+  cursor?.classList.add('hit');
+
+  const flash = document.createElement('div');
+  flash.className = 'reel-flash';
+  wrapper.appendChild(flash);
+  void flash.offsetWidth;        // force reflow so the animation plays from the start
+  flash.classList.add('bloom');
+
   playReveal();
 
-  await sleep(800);
+  await sleep(900);
+  flash.remove();
+  cursor?.classList.remove('hit');
 }

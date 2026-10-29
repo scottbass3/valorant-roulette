@@ -296,14 +296,29 @@ body {
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
   border-top: 13px solid var(--red);
+  filter: drop-shadow(0 0 3px var(--red));
 }
-.cursor-line { flex: 1; width: 3px; background: var(--red); opacity: 0.7; }
+.cursor-line {
+  flex: 1; width: 3px;
+  background: var(--red); opacity: 0.7;
+  box-shadow: 0 0 8px var(--red);
+  transition: box-shadow 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+}
 .cursor-bottom {
   width: 0; height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
   border-bottom: 13px solid var(--red);
+  filter: drop-shadow(0 0 3px var(--red));
 }
+/* Cursor lights up in the winner's role colour on reveal */
+.reel-cursor.hit .cursor-line {
+  opacity: 1;
+  background: var(--win, var(--red));
+  box-shadow: 0 0 18px var(--win, var(--red));
+}
+.reel-cursor.hit .cursor-top    { border-top-color: var(--win, var(--red)); }
+.reel-cursor.hit .cursor-bottom { border-bottom-color: var(--win, var(--red)); }
 
 .reel-container {
   width: 100%; height: 100%;
@@ -342,14 +357,40 @@ body {
 }
 .reel-card-name { font-size: 14px; font-weight: 700; text-align: center; letter-spacing: 0.04em; }
 
-.reel-card--selected {
-  box-shadow: 0 0 0 2px var(--red), 0 0 30px rgba(255,70,85,0.6);
-  animation: selectedPulse 0.5s ease;
+/* All non-winning cards fade back so the winner owns the spotlight */
+.reel-container.revealing .reel-card:not(.reel-card--selected) {
+  opacity: 0.22;
+  filter: grayscale(0.7) brightness(0.65);
+  transition: opacity 0.45s ease, filter 0.45s ease;
 }
-@keyframes selectedPulse {
+
+.reel-card--selected {
+  position: relative;
+  z-index: 3;
+  border-color: var(--win, var(--red));
+  box-shadow: 0 0 0 2px var(--win, var(--red)),
+              0 0 40px 4px color-mix(in srgb, var(--win, var(--red)) 65%, transparent);
+  animation: selectedPop 0.55s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes selectedPop {
   0%   { transform: scale(1); }
-  40%  { transform: scale(1.07); }
-  100% { transform: scale(1); }
+  35%  { transform: scale(1.12); }
+  100% { transform: scale(1.06); }
+}
+
+/* Role-coloured light that blooms across the reel on reveal */
+.reel-flash {
+  position: absolute; inset: 0;
+  z-index: 6; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle at 50% 50%,
+              color-mix(in srgb, var(--win, var(--red)) 55%, transparent) 0%,
+              transparent 58%);
+}
+.reel-flash.bloom { animation: reelFlash 0.6s ease-out forwards; }
+@keyframes reelFlash {
+  0%   { opacity: 0;    transform: scale(0.5); }
+  18%  { opacity: 0.95; }
+  100% { opacity: 0;    transform: scale(1.35); }
 }
 
 /* ─── Opening result ─────────────────────────────────────────────────────── */
@@ -357,7 +398,13 @@ body {
   font-size: 28px; font-weight: 700;
   letter-spacing: 0.08em;
   text-align: center;
-  animation: fadeUp 0.4s ease;
+  animation: resultIn 0.5s cubic-bezier(.34,1.56,.64,1) both;
+  text-shadow: 0 0 24px color-mix(in srgb, currentColor 55%, transparent);
+}
+@keyframes resultIn {
+  0%   { opacity: 0; transform: translateY(12px) scale(0.92); }
+  60%  { opacity: 1; transform: translateY(0)    scale(1.05); }
+  100% { opacity: 1; transform: translateY(0)    scale(1); }
 }
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -799,4 +846,12 @@ body {
   .btn-xl { font-size: 17px; padding: 13px 32px; }
   .current-player-name { font-size: 26px; }
   .config-canonical { display: none; }
+}
+
+/* ─── Reduced motion ─────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .reel-track { filter: none !important; }
+  .reel-flash { display: none; }
+  .reel-card--selected { animation: none; transform: scale(1.04); }
+  .opening-result { animation: none; }
 }
